@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
-import Controller from "./controller.interface";
+import IController from "./controller.interface";
 
-class ExceptionController implements Controller {
+class ExceptionController implements IController {
   private router: Router = Router({ mergeParams: true });
 
   public initializeRoutes(): Router {

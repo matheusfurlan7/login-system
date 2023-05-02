@@ -1,9 +1,10 @@
 import cors from 'cors';
 import express, { Express } from 'express';
-import { App as AppInterface } from './app.interface';
-import Controller from '../shared/controller/controller.interface';
 
-class App implements AppInterface {
+import IApp from './app.interface';
+import IController from '../shared/controller/controller.interface';
+
+class App implements IApp {
   private server: Express;
   private startExecution: Date = new Date();
   private port: number = 0;
@@ -31,7 +32,7 @@ class App implements AppInterface {
     });
   };  
   
-  constructor(port: number, controllers: Controller[]) {
+  constructor(port: number, controllers: IController[]) {
     this.port = port;
     this.server = express();
 
@@ -44,7 +45,7 @@ class App implements AppInterface {
     this.server.use(cors());
   }
 
-  private routers(controllers: Controller[]): void {
+  private routers(controllers: IController[]): void {
     this.server.get('/isOpen/', this.openServer);
 
     controllers.forEach((controller) => {
