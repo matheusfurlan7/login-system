@@ -1,8 +1,9 @@
 import cors from 'cors';
 import express, { Express } from 'express';
 
-import IApp from './app.interface';
-import IController from '../shared/controller/controller.interface';
+import { IApp } from './IApp';
+import errorMiddleware from '../shared/exception';
+import { IController } from '../shared/controllers/IController';
 
 class App implements IApp {
   private server: Express;
@@ -12,40 +13,41 @@ class App implements IApp {
   private openServer = (req: express.Request, res: express.Response) => {
     const adjustDisplay = (value: number, amount: number): string => {
       let display = value.toString();
-  
+
       while (display.length < amount) {
         display = `0${display}`
       }
-  
+
       return display;
     }
-  
+
     const milliseconds: number = Math.abs(new Date().getTime() - this.startExecution.getTime());
     const seconds: number = Math.trunc(milliseconds / 1000);
     const minuts: number = Math.trunc(seconds / 60);
     const hours: number = Math.trunc(minuts / 60);
-  
+
     res.status(200).send({
       message: 'server is open',
       started: this.startExecution,
       runningTime: `${adjustDisplay(hours, 2)}:${adjustDisplay(minuts - (hours * 60), 2)}`
     });
-  };  
-  
+  };
+
   constructor(port: number, controllers: IController[]) {
     this.port = port;
     this.server = express();
 
-    this.middlewares();
-    this.routers(controllers);
-  }  
+    this.initializeMiddlewares();
+    this.initializeControllers(controllers);
+    this.initializeErrorHandling();
+  }
 
-  private middlewares(): void {
+  private initializeMiddlewares(): void {
     this.server.use(express.json());
     this.server.use(cors());
   }
 
-  private routers(controllers: IController[]): void {
+  private initializeControllers(controllers: IController[]): void {
     this.server.get('/isOpen/', this.openServer);
 
     controllers.forEach((controller) => {
@@ -53,10 +55,15 @@ class App implements IApp {
     });
   }
 
+  private initializeErrorHandling(): void {
+    this.server.use('/', (req, res) => { res.status(404).send({ message: 'The route especificed not found.' }) });
+    this.server.use(errorMiddleware);
+  }
+
   public listen(): void {
     this.server.listen(this.port, () => {
       console.log(`Server is running at ${this.port}`)
-    }); 
+    });
   }
 }
 

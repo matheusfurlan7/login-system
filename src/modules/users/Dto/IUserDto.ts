@@ -1,5 +1,5 @@
-interface IUser {
-  id?: number; 
+interface IUserDto {
+  id?: number;
   createdAt?: Date;
   updatedAt?: Date;
   name: string;
@@ -9,4 +9,4 @@ interface IUser {
   password: string;
 }
 
-export default IUser;
+export { IUserDto };

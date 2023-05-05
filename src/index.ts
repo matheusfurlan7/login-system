@@ -1,6 +1,6 @@
 import Api from './app/app';
 import dotenv from 'dotenv';
-import controllers from './shared/controller';
+import controllers from './shared/controllers';
 
 dotenv.config();
 
