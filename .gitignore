@@ -1,6 +1,9 @@
 # build
 build/
 
+# Docker - Database
+database/
+
 # Logs
 logs
 *.log

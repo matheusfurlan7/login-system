@@ -1,10 +1,14 @@
-import App from './app/app';
+import Api from './app/app';
 import dotenv from 'dotenv';
+import controllers from './shared/controllers';
 
 dotenv.config();
 
-const port: Number = Number(process.env.PORT);
+const port: number = Number(process.env.PORT);
 
-App.server.listen(port, () => {
-  console.log(`Server is running at ${port}`)
-});
+const api = new Api(
+  port,
+  controllers
+);
+
+api.listen();
