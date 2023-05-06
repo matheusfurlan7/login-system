@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 
-import { IController } from "../../shared/controllers/IController";
+import { IBaseController } from "../../shared/controllers/IBaseController";
 import { IUserDto } from "./Dto/IUserDto";
 import { IUserResponseDto } from "./Dto/IUserResponseDto";
 
@@ -9,7 +9,9 @@ import GetIdUserUseCase from "./UseCase/GetIdUserUseCase";
 import CreateUserUseCase from "./UseCase/CreateUserUseCase";
 import UpdateUserUseCase from "./UseCase/UpdateUserUseCase";
 
-class UserController implements IController {
+import { authMiddleware } from "../../shared/auth";
+
+class UserController implements IBaseController {
   private router: Router = Router({ mergeParams: true });
 
   private serializador(user: IUserDto | IUserDto[]): IUserResponseDto | IUserResponseDto[] {
@@ -84,10 +86,10 @@ class UserController implements IController {
   };
 
   public initializeRoutes(): Router {
-    this.router.get('/users/', this.getAll);
-    this.router.get('/users/:id', this.getId);
+    this.router.get('/users/', authMiddleware, this.getAll);
+    this.router.get('/users/:id', authMiddleware, this.getId);
     this.router.post('/users/', this.create);
-    this.router.put('/users/:id', this.update);
+    this.router.put('/users/:id', authMiddleware, this.update); 
 
     return this.router;
   }

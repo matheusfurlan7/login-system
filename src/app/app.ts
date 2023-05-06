@@ -2,8 +2,8 @@ import cors from 'cors';
 import express, { Express } from 'express';
 
 import { IApp } from './IApp';
-import errorMiddleware from '../shared/exception';
-import { IController } from '../shared/controllers/IController';
+import { errorMiddleware } from '../shared/exception';
+import { IBaseController } from '../shared/controllers/IBaseController';
 
 class App implements IApp {
   private server: Express;
@@ -33,7 +33,7 @@ class App implements IApp {
     });
   };
 
-  constructor(port: number, controllers: IController[]) {
+  constructor(port: number, controllers: IBaseController[]) {
     this.port = port;
     this.server = express();
 
@@ -47,7 +47,7 @@ class App implements IApp {
     this.server.use(cors());
   }
 
-  private initializeControllers(controllers: IController[]): void {
+  private initializeControllers(controllers: IBaseController[]): void {
     this.server.get('/isOpen/', this.openServer);
 
     controllers.forEach((controller) => {
