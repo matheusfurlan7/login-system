@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-interface IController {
+interface IBaseController {
   initializeRoutes(): Router;
 }
 
-export { IController };
+export { IBaseController };
