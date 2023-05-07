@@ -1,10 +1,12 @@
-import { AppError } from "../../../shared/exception/AppError";
+import { sign } from 'jsonwebtoken';
+
 import { IAutenticationDto } from "../Dto/IAutenticationDto";
 import { IAutenticationResponseDto } from "../Dto/IAutenticationResponseDto";
 
 import UserRepository from "../../users/Repository";
 
-import { sign } from 'jsonwebtoken';
+import { AppError } from "../../../shared/exception/AppError";
+import { compare } from '../../../shared/bcrypt';
 
 class AutenticationUserUseCase {
   async execute({ userName, password }: IAutenticationDto): Promise<IAutenticationResponseDto> {
@@ -17,7 +19,7 @@ class AutenticationUserUseCase {
     const repository = new UserRepository();
     const user = await repository.getUserName(0, userName);
 
-    if ((!user) || (user.password != password))
+    if ((!user) || (compare(user.password, password)))
       throw new AppError(404, "User or password incorrect.");
 
     if (!process.env.JWT_SECRET)

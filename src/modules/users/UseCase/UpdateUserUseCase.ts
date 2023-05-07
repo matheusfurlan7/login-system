@@ -1,9 +1,10 @@
 import { IUserDto } from "../Dto/IUserDto";
 import { IUserRepository } from "../Repository/IUserRepository";
 import { IUpdateUserDto } from "../Dto/IUpdateUserDto";
-import UserRepository from "../Repository";
-import { isValidDate } from "../../../shared/function";
 
+import UserRepository from "../Repository";
+
+import { isValidDate } from "../../../shared/validetDate";
 import { AppError } from "../../../shared/exception/AppError";
 
 class UpdateUserUseCase {
