@@ -5,8 +5,8 @@ import { ICreateUserDto } from "../Dto/ICreateUserDto";
 import UserRepository from "../Repository";
 
 import { AppError } from "../../../shared/exception/AppError";
-
-import { isValidDate } from "../../../shared/function";
+import { isValidDate } from "../../../shared/validetDate";
+import { encrypt } from "../../../shared/bcrypt";
 
 class CreateUserUseCase {
   async execute({ name, birthDate, email, userName, password }: ICreateUserDto): Promise<IUserDto> {
@@ -31,7 +31,14 @@ class CreateUserUseCase {
     if (!!usersUserName)
       throw new AppError(404, `The userName "${userName}" is being used`);
 
-    return await repository.create({ name, birthDate, email, userName, password });
+    const hashPassword = encrypt(password);
+    return await repository.create({ 
+      name, 
+      birthDate, 
+      email, 
+      userName, 
+      password: hashPassword
+    });
   }
 }
 
