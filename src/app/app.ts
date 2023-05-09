@@ -2,11 +2,11 @@ import cors from 'cors';
 import express, { Express } from 'express';
 
 import { IApp } from './IApp';
-import { errorMiddleware } from '../shared/exception';
+import { errorMiddleware } from '../shared/exception/errorMiddleware';
 import { IBaseController } from '../shared/controllers/IBaseController';
 
 class App implements IApp {
-  private server: Express;
+  public server: Express;
   private startExecution: Date = new Date();
   private port: number = 0;
 

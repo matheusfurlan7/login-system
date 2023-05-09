@@ -9,7 +9,7 @@ import GetIdUserUseCase from "./UseCase/GetIdUserUseCase";
 import CreateUserUseCase from "./UseCase/CreateUserUseCase";
 import UpdateUserUseCase from "./UseCase/UpdateUserUseCase";
 
-import { authMiddleware } from "../../shared/auth";
+import { authMiddleware } from "../../shared/auth/authMiddleware";
 
 class UserController implements IBaseController {
   private router: Router = Router({ mergeParams: true });
